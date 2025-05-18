@@ -10,12 +10,10 @@ import type {
   Response,
   RequestInit
 } from 'undici';
-import { BetterSqlite3CacheStore } from 'undici-cache-store-better-sqlite3';
 
 export type UndiciResponseData<T = unknown> = Dispatcher.ResponseData<T>;
 
 import { inspect } from 'node:util';
-import path from 'node:path';
 import fs from 'node:fs';
 import { CACHE_DIR } from '../constants/dir';
 
@@ -115,14 +113,6 @@ setGlobalDispatcher(agent.compose(
   }),
   interceptors.redirect({
     maxRedirections: 5
-  }),
-  interceptors.cache({
-    store: new BetterSqlite3CacheStore({
-      loose: true,
-      location: path.join(CACHE_DIR, 'undici-better-sqlite3-cache-store.db'),
-      maxEntrySize: 1024 * 1024 * 100 // 100 MiB
-    }),
-    cacheByDefault: 180 // 3 minutes
   })
 ));
 
